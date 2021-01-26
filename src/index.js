@@ -9,29 +9,29 @@ const Theme = {
   LIGHT: 'light-theme',
   DARK: 'dark-theme',
 };
-const darkTheme = function () {
-  document.body.classList.add('dark-theme');
-  document.body.classList.remove('light-theme');
-  localStorage.setItem('theme', Theme.DARK);
-};
-const lightTheme = function () {
-  document.body.classList.add('light-theme');
-  document.body.classList.remove('dark-theme');
-  localStorage.setItem('theme', Theme.LIGHT);
-};
-themeSwitchBtn.addEventListener('change', e => {
+const changeTheme = function () {
   if (themeSwitchBtn.checked) {
-    darkTheme();
+    document.body.classList.toggle('dark-theme');
+    localStorage.setItem('theme', Theme.DARK);
   } else {
-    lightTheme();
+    document.body.classList.replace('dark-theme', 'light-theme');
+    localStorage.setItem('theme', Theme.LIGHT);
   }
-});
+  if (
+    themeSwitchBtn.checked &&
+    document.body.classList.contains('light-theme')
+  ) {
+    document.body.classList.remove('light-theme');
+  }
+};
+themeSwitchBtn.addEventListener('change', changeTheme);
 
-const localValue = localStorage.getItem('theme');
 function saveLocalStrValue() {
+  const localValue = localStorage.getItem('theme');
   if (localValue === Theme.DARK) {
     themeSwitchBtn.checked = true;
     document.body.classList.add('dark-theme');
   }
 }
 saveLocalStrValue();
+// Кстати, я нашел в чем была проблема с морганием. в стилях для body есть транзишн. я его убрал и стало норм :)
